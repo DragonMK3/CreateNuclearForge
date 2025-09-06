@@ -1,3 +1,5 @@
+Fix the bug that Reactor cannot work
+
 # About 
 Create nuclear is a mod that adds a whole nuclear system to the create mod. An optimized reactor produces over a million SU.
 
