@@ -178,7 +178,7 @@ public class ReactorControllerBlockEntity extends SmartBlockEntity implements II
         compound.putString("state", powered.name());
         compound.put("screen_pattern", screen_pattern);
 */
-        compound.putDouble("total", calculateProgress());
+        compound.putDouble("total", this.total);
         super.write(compound, clientPacket);
     }
 
@@ -222,10 +222,11 @@ public class ReactorControllerBlockEntity extends SmartBlockEntity implements II
                 coolerItem = ItemStack.of(inventoryTag.getCompound(1));
                 if (fuelItem.getCount() > 0 && coolerItem.getCount() > 0) {
                     configuredPattern.getOrCreateTag().putDouble("heat", calculateHeat(tag));
-                    if (updateTimers()) {
+                        if (updateTimers()) {
                         be.inventory.extractItem(0, 1, false);
                         be.inventory.extractItem(1, 1, false);
                         total = calculateProgress();
+                        this.rotate(getBlockState(), new BlockPos(getBlockPos().getX(), getBlockPos().getY() + FindController('O').getY(), getBlockPos().getZ()), getLevel(), heat/4);
                         int heat = (int) configuredPattern.getOrCreateTag().getDouble("heat");
 
                         if (IHeat.HeatLevel.of(heat) == IHeat.HeatLevel.SAFETY || IHeat.HeatLevel.of(heat) == IHeat.HeatLevel.CAUTION || IHeat.HeatLevel.of(heat) == IHeat.HeatLevel.WARNING) {
@@ -462,6 +463,7 @@ public class ReactorControllerBlockEntity extends SmartBlockEntity implements II
             if (configuredPattern.isEmpty()) {
                 inventory.setStackInSlot(0, heldItem);
                 configuredPattern = heldItem;
+                this.total = calculateProgress();
                 //player.setItemInHand(hand, ItemStack.EMPTY);
             }
             notifyUpdate();
